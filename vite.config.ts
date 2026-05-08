@@ -11,5 +11,8 @@ export default defineConfig({
 	cloudflare: false,
 	vite: {
 		plugins: [nitro({ preset: "vercel" })],
+		ssr: {
+			noExternal: ["@supabase/supabase-js", "@supabase/auth-js", "tslib"],
+		},
 	},
 });
