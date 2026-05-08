@@ -3,7 +3,7 @@ import { S as Slot } from "../_libs/radix-ui__react-slot.mjs";
 import { c as cva } from "../_libs/class-variance-authority.mjs";
 import { c as clsx } from "../_libs/clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
-import { s as supabase } from "./router-VTNU8hFh.mjs";
+import { s as supabase } from "./router-D_7zmzov.mjs";
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
@@ -77,7 +77,10 @@ const CardFooter = reactExports.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref, className: cn("flex items-center p-6 pt-0", className), ...props })
 );
 CardFooter.displayName = "CardFooter";
-const ADMIN_EMAIL_ALLOWLIST = ["aarushdineshyadav@gmail.com"];
+const ADMIN_EMAIL_ALLOWLIST = [
+  "aarushdineshyadav@gmail.com",
+  "arpit.rai@ustu.edu.in"
+];
 function isAllowedAdminEmail(email) {
   const normalizedEmail = email?.trim().toLowerCase();
   if (!normalizedEmail) return false;

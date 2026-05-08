@@ -1,5 +1,5 @@
-import { s as supabase } from "./router-VTNU8hFh.mjs";
-import { g as getSellerProfile } from "./sellerProfiles-BBPVzNtq.mjs";
+import { s as supabase } from "./router-D_7zmzov.mjs";
+import { g as getSellerProfile } from "./sellerProfiles-BaII5BVd.mjs";
 const LOCAL_LISTINGS_KEY = "artisan-echo-product-listings";
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {

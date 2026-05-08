@@ -27,8 +27,8 @@ import "../_libs/iceberg-js.mjs";
 import "../_libs/supabase__auth-js.mjs";
 import "tslib";
 import "../_libs/supabase__functions-js.mjs";
-const supabaseUrl = "https://jbahpkwyzdiriinbynck.supabase.co";
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpiYWhwa3d5emRpcmlpbmJ5bmNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3MDc5NzQsImV4cCI6MjA5MjI4Mzk3NH0.GfvfHNGILYPNDATtItxDtFAk8LL7tRiGAyBHcXs2ToY";
+const supabaseUrl = "https://lpgbbunguweqrytsjerd.supabase.co/rest/v1/";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwZ2JidW5ndXdlcXJ5dHNqZXJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMDE3OTEsImV4cCI6MjA5Mzc3Nzc5MX0.wb8uUxGF6xWipWyBNRQMkPpnVIbhTl67WKn_eEL06mM";
 let _supabase = null;
 function getSupabaseClient() {
   if (_supabase) return _supabase;
@@ -167,7 +167,7 @@ function SupabaseProvider({ children }) {
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children });
 }
-const $$splitComponentImporter$3 = () => import("./seller-onboarding-Ddjctv2x.mjs");
+const $$splitComponentImporter$3 = () => import("./seller-onboarding-BViqK4Gr.mjs");
 const Route$3 = createFileRoute("/seller-onboarding")({
   head: () => ({
     meta: [{
@@ -179,7 +179,7 @@ const Route$3 = createFileRoute("/seller-onboarding")({
   }),
   component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-const $$splitComponentImporter$2 = () => import("./admin-BIp4gkZ6.mjs");
+const $$splitComponentImporter$2 = () => import("./admin-D39u9Php.mjs");
 const Route$2 = createFileRoute("/admin")({
   head: () => ({
     meta: [{
@@ -191,7 +191,7 @@ const Route$2 = createFileRoute("/admin")({
   }),
   component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-const $$splitComponentImporter$1 = () => import("./index-DaE41gyy.mjs");
+const $$splitComponentImporter$1 = () => import("./index-69OohcVE.mjs");
 const Route$1 = createFileRoute("/")({
   head: () => ({
     meta: [{
@@ -209,7 +209,7 @@ const Route$1 = createFileRoute("/")({
   }),
   component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
-const $$splitComponentImporter = () => import("./my-listings-Ci_THENI.mjs");
+const $$splitComponentImporter = () => import("./my-listings-UJ_SPd_t.mjs");
 const Route = createFileRoute("/marketplace/my-listings")({
   head: () => ({
     meta: [{
