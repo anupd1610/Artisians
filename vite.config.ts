@@ -10,7 +10,7 @@ import { nitro } from "nitro/vite";
 export default defineConfig({
 	cloudflare: false,
 	vite: {
-		plugins: [nitro({ preset: "vercel" })],
+		plugins: [nitro({ preset: "netlify" })],
 		ssr: {
 			noExternal: ["@supabase/supabase-js", "@supabase/auth-js", "tslib"],
 		},
