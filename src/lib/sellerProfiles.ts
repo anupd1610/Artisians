@@ -33,7 +33,7 @@ export interface SellerProfile {
 }
 
 export interface SellerProfileInput {
-  clerkUserId: string;
+  userId: string;
   fullName: string;
   phoneNumber: string;
   address: string;
@@ -79,16 +79,16 @@ export function readFileAsDataUrl(file: File) {
   });
 }
 
-export async function getSellerProfile(clerkUserId: string) {
+export async function getSellerProfile(userId: string) {
   try {
-    if (!clerkUserId) {
+    if (!userId) {
       return { data: null, error: "Missing seller identity." };
     }
 
     const { data, error } = await supabase
       .from("seller_profiles")
       .select("*")
-      .eq("clerk_user_id", clerkUserId)
+      .eq("clerk_user_id", userId)
       .maybeSingle();
 
     if (error) {
@@ -103,11 +103,11 @@ export async function getSellerProfile(clerkUserId: string) {
 
 export async function upsertSellerProfile(input: SellerProfileInput) {
   try {
-    const existingProfileResult = await getSellerProfile(input.clerkUserId);
+    const existingProfileResult = await getSellerProfile(input.userId);
     const existingProfile = existingProfileResult.data;
 
     const payload = {
-      clerk_user_id: input.clerkUserId,
+      clerk_user_id: input.userId,
       full_name: input.fullName,
       phone_number: input.phoneNumber,
       address: input.address,
@@ -139,14 +139,14 @@ export async function upsertSellerProfile(input: SellerProfileInput) {
   }
 }
 
-export async function isAdminUser(clerkUserId: string) {
+export async function isAdminUser(userId: string) {
   try {
-    if (!clerkUserId) return false;
+    if (!userId) return false;
 
     const { data, error } = await supabase
       .from("admins")
       .select("id")
-      .eq("clerk_user_id", clerkUserId)
+      .eq("clerk_user_id", userId)
       .maybeSingle();
 
     if (error || !data) {
@@ -159,16 +159,16 @@ export async function isAdminUser(clerkUserId: string) {
   }
 }
 
-export async function isAdminIdentity(clerkUserId?: string, email?: string | null) {
+export async function isAdminIdentity(userId?: string, email?: string | null) {
   if (isAllowedAdminEmail(email)) {
     return true;
   }
 
-  if (!clerkUserId) {
+  if (!userId) {
     return false;
   }
 
-  return isAdminUser(clerkUserId);
+  return isAdminUser(userId);
 }
 
 export async function getSellerProfilesWithCounts() {
@@ -239,14 +239,14 @@ export async function getSellerProfilesWithCounts() {
   }
 }
 
-export async function createSellerProfilePlaceholder(clerkUserId: string, fallbackPhone?: string | null) {
+export async function createSellerProfilePlaceholder(userId: string, fallbackPhone?: string | null) {
   try {
     const { data, error } = await supabase
       .from("seller_profiles")
       .upsert(
         {
-          clerk_user_id: clerkUserId,
-          full_name: `Seller ${clerkUserId.slice(0, 8)}`,
+          clerk_user_id: userId,
+          full_name: `Seller ${userId.slice(0, 8)}`,
           phone_number: fallbackPhone?.trim() || "Not provided",
           address: "Pending seller address.",
           government_id_type: "Pending",
@@ -310,7 +310,7 @@ export async function blockSellerProfile(
 
 export async function promoteSellerProfileToAdmin(
   sellerProfileId: string,
-  clerkUserId: string,
+  userId: string,
   promotedByAdminId: string,
 ) {
   try {
@@ -327,7 +327,7 @@ export async function promoteSellerProfileToAdmin(
 
     const adminInsert = await supabase.from("admins").upsert(
       {
-        clerk_user_id: clerkUserId,
+        clerk_user_id: userId,
         seller_profile_id: sellerProfileId,
         promoted_by_admin_id: promotedByAdminId,
       },

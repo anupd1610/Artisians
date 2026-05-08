@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { isAdminIdentity } from "@/lib/sellerProfiles";
 
-export function useAdminAccess(clerkUserId?: string, email?: string | null) {
+export function useAdminAccess(userId?: string, email?: string | null) {
   const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(Boolean(clerkUserId));
+  const [loading, setLoading] = useState(Boolean(userId));
 
   useEffect(() => {
     let isMounted = true;
 
     async function checkAdmin() {
-      if (!clerkUserId) {
+      if (!userId) {
         if (isMounted) {
           setIsAdmin(false);
           setLoading(false);
@@ -18,7 +18,7 @@ export function useAdminAccess(clerkUserId?: string, email?: string | null) {
       }
 
       setLoading(true);
-      const result = await isAdminIdentity(clerkUserId, email);
+      const result = await isAdminIdentity(userId, email);
 
       if (!isMounted) return;
 
@@ -31,7 +31,7 @@ export function useAdminAccess(clerkUserId?: string, email?: string | null) {
     return () => {
       isMounted = false;
     };
-  }, [clerkUserId, email]);
+  }, [userId, email]);
 
   return { isAdmin, loading };
 }

@@ -1,12 +1,11 @@
 import { r as reactExports, j as jsxRuntimeExports } from "../_libs/react.mjs";
 import { d as useNavigate } from "../_libs/tanstack__react-router.mjs";
-import "../_libs/clerk__react.mjs";
-import { g as getProductListings, d as deleteProductListing } from "./productListings-DUc64N3F.mjs";
-import { B as Button, C as Card, e as cn, h as buttonVariants } from "./sellerProfiles-BaII5BVd.mjs";
+import { u as useAuth } from "./router-TuDnUs-t.mjs";
+import { g as getProductListings, d as deleteProductListing } from "./productListings-DoenrZlK.mjs";
+import { B as Button, C as Card, e as cn, h as buttonVariants } from "./sellerProfiles-CxEQPkQ2.mjs";
 import { u as useEmblaCarousel } from "../_libs/embla-carousel-react.mjs";
 import { R as Root2, T as Trigger2, P as Portal2, C as Content2, a as Title2, D as Description2, b as Cancel, A as Action, O as Overlay2 } from "../_libs/radix-ui__react-alert-dialog.mjs";
 import "../_libs/sonner.mjs";
-import { o as useUser } from "../_libs/clerk__shared.mjs";
 import { n as Plus, p as Loader, i as Trash2, A as ArrowLeft, q as ArrowRight } from "../_libs/lucide-react.mjs";
 import "../_libs/tanstack__router-core.mjs";
 import "../_libs/tanstack__history.mjs";
@@ -20,9 +19,7 @@ import "util";
 import "crypto";
 import "async_hooks";
 import "stream";
-import "../_libs/scheduler.mjs";
 import "../_libs/isbot.mjs";
-import "./router-D_7zmzov.mjs";
 import "../_libs/supabase__supabase-js.mjs";
 import "../_libs/supabase__postgrest-js.mjs";
 import "../_libs/supabase__realtime-js.mjs";
@@ -32,7 +29,6 @@ import "../_libs/iceberg-js.mjs";
 import "../_libs/supabase__auth-js.mjs";
 import "tslib";
 import "../_libs/supabase__functions-js.mjs";
-import "../_libs/dequal.mjs";
 import "../_libs/radix-ui__react-slot.mjs";
 import "../_libs/radix-ui__react-compose-refs.mjs";
 import "../_libs/class-variance-authority.mjs";
@@ -340,9 +336,9 @@ const AlertDialogCancel = reactExports.forwardRef(({ className, ...props }, ref)
 AlertDialogCancel.displayName = Cancel.displayName;
 function MyListingsPage() {
   const {
-    isSignedIn,
     user
-  } = useUser();
+  } = useAuth();
+  const isSignedIn = !!user;
   const navigate = useNavigate();
   const carouselApiRef = reactExports.useRef(null);
   const autoRotateRef = reactExports.useRef(null);

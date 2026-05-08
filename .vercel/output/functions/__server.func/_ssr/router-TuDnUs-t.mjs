@@ -1,8 +1,7 @@
 import { j as jsxRuntimeExports, r as reactExports } from "../_libs/react.mjs";
 import { c as createRouter, u as useRouter, a as createRootRoute, b as createFileRoute, l as lazyRouteComponent, H as HeadContent, S as Scripts, O as Outlet, L as Link } from "../_libs/tanstack__react-router.mjs";
-import { C as ClerkProvider } from "../_libs/clerk__react.mjs";
 import { c as createClient } from "../_libs/supabase__supabase-js.mjs";
-import { T as Toaster$1 } from "../_libs/sonner.mjs";
+import { T as Toaster$1, t as toast } from "../_libs/sonner.mjs";
 import "../_libs/tanstack__router-core.mjs";
 import "../_libs/tanstack__history.mjs";
 import "../_libs/cookie-es.mjs";
@@ -15,10 +14,7 @@ import "util";
 import "crypto";
 import "async_hooks";
 import "stream";
-import "../_libs/scheduler.mjs";
 import "../_libs/isbot.mjs";
-import "../_libs/clerk__shared.mjs";
-import "../_libs/dequal.mjs";
 import "../_libs/supabase__postgrest-js.mjs";
 import "../_libs/supabase__realtime-js.mjs";
 import "../_libs/supabase__phoenix.mjs";
@@ -54,6 +50,67 @@ async function testDatabaseConnection() {
     return { success: false, error: String(err) };
   }
 }
+const AuthContext = reactExports.createContext({
+  user: null,
+  session: null,
+  loading: true,
+  signOut: async () => {
+  }
+});
+function AuthProvider({ children }) {
+  const [user, setUser] = reactExports.useState(null);
+  const [session, setSession] = reactExports.useState(null);
+  const [loading, setLoading] = reactExports.useState(true);
+  reactExports.useEffect(() => {
+    let mounted = true;
+    async function getSession() {
+      try {
+        const {
+          data: { session: session2 },
+          error
+        } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (mounted) {
+          setSession(session2);
+          setUser(session2?.user ?? null);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching session:", error);
+        if (mounted) setLoading(false);
+      }
+    }
+    getSession();
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange((_event, session2) => {
+      if (mounted) {
+        setSession(session2);
+        setUser(session2?.user ?? null);
+        setLoading(false);
+      }
+    });
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+  const signOut = async () => {
+    try {
+      setLoading(true);
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      toast.success("Logged out successfully");
+    } catch (error) {
+      console.error("Error signing out:", error);
+      toast.error("Error signing out");
+    } finally {
+      setLoading(false);
+    }
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(AuthContext.Provider, { value: { user, session, loading, signOut }, children });
+}
+const useAuth = () => reactExports.useContext(AuthContext);
 function useSupabaseConnection() {
   const [status, setStatus] = reactExports.useState({
     connected: false,
@@ -100,7 +157,7 @@ const Toaster = ({ ...props }) => {
     }
   );
 };
-const appCss = "/assets/styles-DRdTrpBu.css";
+const appCss = "/assets/styles-DsRpT2J9.css";
 function NotFoundComponent() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex min-h-screen items-center justify-center bg-background px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-md text-center", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-7xl font-bold text-foreground", children: "404" }),
@@ -151,7 +208,7 @@ function RootShell({ children }) {
   ] });
 }
 function RootComponent() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(ClerkProvider, { publishableKey: "pk_test_ZW5hYmxlZC1nbmF0LTcyLmNsZXJrLmFjY291bnRzLmRldiQ", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(SupabaseProvider, { children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(AuthProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(SupabaseProvider, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Toaster, { richColors: true, position: "top-right" })
   ] }) });
@@ -167,7 +224,7 @@ function SupabaseProvider({ children }) {
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children });
 }
-const $$splitComponentImporter$3 = () => import("./seller-onboarding-BViqK4Gr.mjs");
+const $$splitComponentImporter$3 = () => import("./seller-onboarding-CzvfQ_K7.mjs");
 const Route$3 = createFileRoute("/seller-onboarding")({
   head: () => ({
     meta: [{
@@ -179,7 +236,7 @@ const Route$3 = createFileRoute("/seller-onboarding")({
   }),
   component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-const $$splitComponentImporter$2 = () => import("./admin-D39u9Php.mjs");
+const $$splitComponentImporter$2 = () => import("./admin-BO6GIes2.mjs");
 const Route$2 = createFileRoute("/admin")({
   head: () => ({
     meta: [{
@@ -191,7 +248,7 @@ const Route$2 = createFileRoute("/admin")({
   }),
   component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-const $$splitComponentImporter$1 = () => import("./index-69OohcVE.mjs");
+const $$splitComponentImporter$1 = () => import("./index-CDHiRZIK.mjs");
 const Route$1 = createFileRoute("/")({
   head: () => ({
     meta: [{
@@ -209,7 +266,7 @@ const Route$1 = createFileRoute("/")({
   }),
   component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
-const $$splitComponentImporter = () => import("./my-listings-UJ_SPd_t.mjs");
+const $$splitComponentImporter = () => import("./my-listings-DoF9tWTn.mjs");
 const Route = createFileRoute("/marketplace/my-listings")({
   head: () => ({
     meta: [{
@@ -312,5 +369,6 @@ const router = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
 }, Symbol.toStringTag, { value: "Module" }));
 export {
   router as r,
-  supabase as s
+  supabase as s,
+  useAuth as u
 };

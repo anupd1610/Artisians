@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { useUser, SignInButton, SignUpButton } from "@clerk/react";
+import { useAuth } from "@/components/auth/AuthContext";
+import { AuthModal } from "@/components/auth/AuthModal";
 import { BadgeCheck, LoaderCircle, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,8 @@ export const Route = createFileRoute("/seller-onboarding")({
 });
 
 function SellerOnboardingPage() {
-  const { isSignedIn, user } = useUser();
+  const { user } = useAuth();
+  const isSignedIn = !!user;
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
@@ -62,7 +64,7 @@ function SellerOnboardingPage() {
       if (!isMounted) return;
 
       setExistingProfile(result.data);
-      setFullName(result.data?.full_name ?? [user.firstName, user.lastName].filter(Boolean).join(" "));
+      setFullName(result.data?.full_name ?? [user.user_metadata?.first_name, user.user_metadata?.last_name].filter(Boolean).join(" "));
       setPhoneNumber(result.data?.phone_number ?? "");
       setAddress(result.data?.address ?? "");
       setGovernmentIdType(result.data?.government_id_type ?? "Aadhaar Card");
@@ -185,16 +187,16 @@ function SellerOnboardingPage() {
               Create your account first, then complete your seller profile with verification details.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <SignInButton mode="modal">
+              <AuthModal defaultTab="login">
                 <button className="border border-foreground px-4 py-2 text-[10px] uppercase tracking-[0.15em] hover:bg-foreground hover:text-text-light transition-colors">
                   Sign In
                 </button>
-              </SignInButton>
-              <SignUpButton mode="modal" afterSignUpUrl="/seller-onboarding">
+              </AuthModal>
+              <AuthModal defaultTab="signup" onSuccess={() => window.location.reload()}>
                 <button className="bg-foreground px-4 py-2 text-[10px] uppercase tracking-[0.15em] text-text-light transition-colors hover:bg-foreground/90">
                   Sign Up
                 </button>
-              </SignUpButton>
+              </AuthModal>
             </div>
           </Card>
         </div>

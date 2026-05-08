@@ -3,7 +3,7 @@ import { c as createContextScope } from "./radix-ui__react-context.mjs";
 import { u as useComposedRefs } from "./radix-ui__react-compose-refs.mjs";
 import { R as Root, T as Trigger, c as createDialogScope, P as Portal, W as WarningProvider, C as Content, a as Title, D as Description, b as Close, O as Overlay } from "./radix-ui__react-dialog.mjs";
 import { c as composeEventHandlers } from "./radix-ui__primitive.mjs";
-import { d as createSlottable } from "./radix-ui__react-slot.mjs";
+import { e as createSlottable } from "./radix-ui__react-slot.mjs";
 var ROOT_NAME = "AlertDialog";
 var [createAlertDialogContext] = createContextScope(ROOT_NAME, [
   createDialogScope

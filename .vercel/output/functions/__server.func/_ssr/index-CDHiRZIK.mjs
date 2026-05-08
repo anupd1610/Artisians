@@ -1,14 +1,13 @@
 import { r as reactExports, j as jsxRuntimeExports } from "../_libs/react.mjs";
 import { d as useNavigate } from "../_libs/tanstack__react-router.mjs";
-import { U as UserButton, S as SignInButton, a as SignUpButton } from "../_libs/clerk__react.mjs";
+import { u as useAuth } from "./router-TuDnUs-t.mjs";
 import { g as gsapWithCSS, S as ScrollTrigger } from "../_libs/gsap.mjs";
-import { u as useAdminAccess, g as getSiteSettings } from "./siteSettings-DIfrIqTy.mjs";
-import { i as isAllowedAdminEmail, C as Card, B as Button, g as getSellerProfile } from "./sellerProfiles-BaII5BVd.mjs";
+import { A as AuthModal, L as Label } from "./AuthModal-Bb3OkJ37.mjs";
+import { u as useAdminAccess, g as getSiteSettings } from "./siteSettings-DQaTrZGW.mjs";
+import { i as isAllowedAdminEmail, C as Card, B as Button, g as getSellerProfile } from "./sellerProfiles-CxEQPkQ2.mjs";
 import { t as toast } from "../_libs/sonner.mjs";
-import { g as getProductListings, d as deleteProductListing, c as createProductListing } from "./productListings-DUc64N3F.mjs";
-import { I as Input, T as Textarea } from "./textarea-DQRn0zgF.mjs";
-import { L as Label } from "./label-BupTES8i.mjs";
-import { o as useUser, p as useClerk } from "../_libs/clerk__shared.mjs";
+import { g as getProductListings, d as deleteProductListing, c as createProductListing } from "./productListings-DoenrZlK.mjs";
+import { I as Input, T as Textarea } from "./textarea-CmMe_hFg.mjs";
 import { f as LogOut, X, M as Menu, S as Store, P as Phone, L as LoaderCircle, i as Trash2, j as Sparkles, I as ImagePlus, k as LayoutGrid, F as Flower2, C as Crown, l as CircleDot, m as Minus, n as Plus, o as Mail } from "../_libs/lucide-react.mjs";
 import "../_libs/tanstack__router-core.mjs";
 import "../_libs/tanstack__history.mjs";
@@ -22,14 +21,7 @@ import "util";
 import "crypto";
 import "async_hooks";
 import "stream";
-import "../_libs/scheduler.mjs";
 import "../_libs/isbot.mjs";
-import "../_libs/radix-ui__react-slot.mjs";
-import "../_libs/radix-ui__react-compose-refs.mjs";
-import "../_libs/class-variance-authority.mjs";
-import "../_libs/clsx.mjs";
-import "../_libs/tailwind-merge.mjs";
-import "./router-D_7zmzov.mjs";
 import "../_libs/supabase__supabase-js.mjs";
 import "../_libs/supabase__postgrest-js.mjs";
 import "../_libs/supabase__realtime-js.mjs";
@@ -39,9 +31,37 @@ import "../_libs/iceberg-js.mjs";
 import "../_libs/supabase__auth-js.mjs";
 import "tslib";
 import "../_libs/supabase__functions-js.mjs";
-import "../_libs/dequal.mjs";
-import "../_libs/radix-ui__react-label.mjs";
+import "../_libs/radix-ui__react-dialog.mjs";
+import "../_libs/radix-ui__primitive.mjs";
+import "../_libs/radix-ui__react-compose-refs.mjs";
+import "../_libs/radix-ui__react-context.mjs";
+import "../_libs/radix-ui__react-id.mjs";
+import "../_libs/@radix-ui/react-use-layout-effect+[...].mjs";
+import "../_libs/@radix-ui/react-use-controllable-state+[...].mjs";
+import "../_libs/@radix-ui/react-dismissable-layer+[...].mjs";
 import "../_libs/radix-ui__react-primitive.mjs";
+import "../_libs/radix-ui__react-slot.mjs";
+import "../_libs/@radix-ui/react-use-callback-ref+[...].mjs";
+import "../_libs/@radix-ui/react-use-escape-keydown+[...].mjs";
+import "../_libs/radix-ui__react-focus-scope.mjs";
+import "../_libs/radix-ui__react-portal.mjs";
+import "../_libs/radix-ui__react-presence.mjs";
+import "../_libs/radix-ui__react-focus-guards.mjs";
+import "../_libs/react-remove-scroll.mjs";
+import "../_libs/react-remove-scroll-bar.mjs";
+import "../_libs/react-style-singleton.mjs";
+import "../_libs/get-nonce.mjs";
+import "../_libs/use-sidecar.mjs";
+import "../_libs/use-callback-ref.mjs";
+import "../_libs/aria-hidden.mjs";
+import "../_libs/radix-ui__react-tabs.mjs";
+import "../_libs/radix-ui__react-roving-focus.mjs";
+import "../_libs/radix-ui__react-collection.mjs";
+import "../_libs/radix-ui__react-direction.mjs";
+import "../_libs/radix-ui__react-label.mjs";
+import "../_libs/class-variance-authority.mjs";
+import "../_libs/clsx.mjs";
+import "../_libs/tailwind-merge.mjs";
 if (typeof window !== "undefined") {
   gsapWithCSS.registerPlugin(ScrollTrigger);
 }
@@ -54,12 +74,12 @@ const links = [
 function Navbar() {
   const linksRef = reactExports.useRef(null);
   const [open, setOpen] = reactExports.useState(false);
-  const { signOut } = useClerk();
-  const { isSignedIn, user } = useUser();
-  const { isAdmin } = useAdminAccess(isSignedIn ? user?.id : void 0, user?.primaryEmailAddress?.emailAddress);
+  const { user, signOut } = useAuth();
+  const isSignedIn = !!user;
+  const { isAdmin } = useAdminAccess(isSignedIn ? user?.id : void 0, user?.email);
   const navLinks = isSignedIn ? [
     ...links,
-    ...isAdmin || isAllowedAdminEmail(user?.primaryEmailAddress?.emailAddress) ? [{ label: "Admin Portal", href: "/admin" }] : [],
+    ...isAdmin || isAllowedAdminEmail(user?.email) ? [{ label: "Admin Portal", href: "/admin" }] : [],
     { label: "Sell Your Craft", href: "#sell" }
   ] : links;
   reactExports.useEffect(() => {
@@ -90,12 +110,12 @@ function Navbar() {
       )) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
         isSignedIn ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden md:flex items-center gap-3", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(UserButton, {}),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-foreground font-medium", children: user?.email?.split("@")[0] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs(
             "button",
             {
               type: "button",
-              onClick: () => signOut({ redirectUrl: "/" }),
+              onClick: () => signOut(),
               className: "inline-flex items-center gap-2 rounded-md border border-foreground px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] text-foreground transition-colors hover:bg-foreground hover:text-text-light",
               children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { className: "h-3.5 w-3.5" }),
@@ -104,8 +124,8 @@ function Navbar() {
             }
           )
         ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden md:flex items-center gap-3", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(SignInButton, { mode: "modal", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "border border-foreground px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground hover:text-text-light transition-colors", children: "Sign In" }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(SignUpButton, { mode: "modal", forceRedirectUrl: "/seller-onboarding", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-foreground text-text-light px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground/90 transition-colors", children: "Sign Up" }) })
+          /* @__PURE__ */ jsxRuntimeExports.jsx(AuthModal, { defaultTab: "login", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "border border-foreground px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground hover:text-text-light transition-colors", children: "Sign In" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(AuthModal, { defaultTab: "signup", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-foreground text-text-light px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground/90 transition-colors", children: "Sign Up" }) })
         ] }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
@@ -130,12 +150,12 @@ function Navbar() {
         l.label
       )),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-3 mt-2 flex-col sm:flex-row", children: isSignedIn ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-3", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(UserButton, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-foreground font-medium", children: user?.email?.split("@")[0] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "button",
           {
             type: "button",
-            onClick: () => signOut({ redirectUrl: "/" }),
+            onClick: () => signOut(),
             className: "inline-flex items-center justify-center gap-2 rounded-md border border-foreground px-4 py-2 text-[10px] uppercase tracking-[0.12em] text-foreground transition-colors hover:bg-foreground hover:text-text-light",
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { className: "h-3.5 w-3.5" }),
@@ -144,8 +164,8 @@ function Navbar() {
           }
         )
       ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(SignInButton, { mode: "modal", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "flex-1 border border-foreground px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground hover:text-text-light transition-colors", children: "Sign In" }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(SignUpButton, { mode: "modal", forceRedirectUrl: "/seller-onboarding", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "flex-1 bg-foreground text-text-light px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground/90 transition-colors", children: "Sign Up" }) })
+        /* @__PURE__ */ jsxRuntimeExports.jsx(AuthModal, { defaultTab: "login", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "flex-1 border border-foreground px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground hover:text-text-light transition-colors", children: "Sign In" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(AuthModal, { defaultTab: "signup", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "flex-1 bg-foreground text-text-light px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground/90 transition-colors", children: "Sign Up" }) })
       ] }) })
     ] })
   ] });
@@ -218,7 +238,8 @@ function Hero() {
   ] });
 }
 function MarketplaceSection({ refreshToken }) {
-  const { isSignedIn, user } = useUser();
+  const { user } = useAuth();
+  const isSignedIn = !!user;
   const [listings, setListings] = reactExports.useState([]);
   const [isLoading, setIsLoading] = reactExports.useState(true);
   const [statusMessage, setStatusMessage] = reactExports.useState(null);
@@ -319,7 +340,8 @@ function MarketplaceSection({ refreshToken }) {
 }
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 function SellProductSection({ onProductCreated }) {
-  const { isSignedIn, user } = useUser();
+  const { user } = useAuth();
+  const isSignedIn = !!user;
   const [name, setName] = reactExports.useState("");
   const [price, setPrice] = reactExports.useState("");
   const [contactNumber, setContactNumber] = reactExports.useState("");
@@ -469,8 +491,8 @@ function SellProductSection({ onProductCreated }) {
           /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display text-xl text-foreground", children: "Sign in to list products" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-2 text-sm text-text-muted-warm leading-[1.7]", children: "Create an account or sign in to start selling your handmade items." }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-5 flex flex-wrap gap-3", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(SignInButton, { mode: "modal", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-foreground text-text-light px-4 py-2 text-[10px] uppercase tracking-[0.15em] hover:bg-foreground/90 transition-colors", children: "Sign In" }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(SignUpButton, { mode: "modal", forceRedirectUrl: "/seller-onboarding", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "border border-foreground px-4 py-2 text-[10px] uppercase tracking-[0.15em] hover:bg-foreground hover:text-text-light transition-colors", children: "Sign Up" }) })
+            /* @__PURE__ */ jsxRuntimeExports.jsx(AuthModal, { defaultTab: "login", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-foreground text-text-light px-4 py-2 text-[10px] uppercase tracking-[0.15em] hover:bg-foreground/90 transition-colors", children: "Sign In" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(AuthModal, { defaultTab: "signup", onSuccess: () => window.location.assign("/seller-onboarding"), children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "border border-foreground px-4 py-2 text-[10px] uppercase tracking-[0.15em] hover:bg-foreground hover:text-text-light transition-colors", children: "Sign Up" }) })
           ] })
         ] })
       ] }) }) : profileLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(Card, { className: "p-6 bg-card-warm border border-card-warm-border", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 text-text-muted-warm", children: [
@@ -497,7 +519,7 @@ function SellProductSection({ onProductCreated }) {
       ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "p-6 bg-card-warm border border-card-warm-border shadow-[0_12px_40px_rgba(0,0,0,0.06)]", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[10px] uppercase tracking-[0.18em] text-text-muted-warm mb-5", children: [
           "Signed in as ",
-          user?.firstName ?? "seller"
+          user?.email?.split("@")[0] ?? "seller"
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { className: "space-y-5", onSubmit: handleSubmit, children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
@@ -1074,17 +1096,17 @@ function Index() {
   const [refreshToken, setRefreshToken] = reactExports.useState(0);
   const navigate = useNavigate();
   const {
-    isSignedIn,
     user
-  } = useUser();
+  } = useAuth();
+  const isSignedIn = !!user;
   reactExports.useEffect(() => {
-    const email = user?.primaryEmailAddress?.emailAddress;
+    const email = user?.email;
     if (isSignedIn && isAllowedAdminEmail(email)) {
       navigate({
         to: "/admin"
       });
     }
-  }, [isSignedIn, navigate, user?.primaryEmailAddress?.emailAddress]);
+  }, [isSignedIn, navigate, user?.email]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "min-h-screen bg-bg-warm", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Navbar, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Hero, {}),

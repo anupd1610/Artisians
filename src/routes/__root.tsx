@@ -1,5 +1,5 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
-import { ClerkProvider } from "@clerk/react";
+import { AuthProvider } from "@/components/auth/AuthContext";
 import { useSupabaseConnection } from "@/hooks/useSupabaseConnection";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -69,12 +69,12 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   return (
-    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
+    <AuthProvider>
       <SupabaseProvider>
         <Outlet />
         <Toaster richColors position="top-right" />
       </SupabaseProvider>
-    </ClerkProvider>
+    </AuthProvider>
   );
 }
 

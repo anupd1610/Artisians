@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { useClerk, useUser } from "@clerk/react";
+import { useAuth } from "@/components/auth/AuthContext";
 import {
   AlertTriangle,
   BadgeCheck,
@@ -77,9 +77,9 @@ function writeAuditEvents(events: AdminAuditEvent[]) {
 
 function AdminPortalPage() {
   const navigate = useNavigate();
-  const { signOut } = useClerk();
-  const { isSignedIn, user } = useUser();
-  const { isAdmin, loading: adminLoading } = useAdminAccess(isSignedIn ? user?.id : undefined, user?.primaryEmailAddress?.emailAddress);
+  const { user, signOut } = useAuth();
+  const isSignedIn = !!user;
+  const { isAdmin, loading: adminLoading } = useAdminAccess(isSignedIn ? user?.id : undefined, user?.email);
   const [activeSection, setActiveSection] = useState<AdminSection>("dashboard");
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
@@ -385,12 +385,12 @@ function AdminPortalPage() {
           </nav>
           <div className="mt-8 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600">
             Signed in as
-            <div className="mt-1 font-semibold text-slate-900">{user?.primaryEmailAddress?.emailAddress ?? user?.id}</div>
+            <div className="mt-1 font-semibold text-slate-900">{user?.email ?? user?.id}</div>
           </div>
           <Button
             type="button"
             className="mt-4 w-full bg-[#ce7b3b] hover:bg-[#b96f35] text-white"
-            onClick={() => signOut({ redirectUrl: "/" })}
+            onClick={() => signOut()}
           >
             <LogOut className="h-4 w-4" />
             Logout

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useUser } from '@clerk/react';
+import { useAuth } from '@/components/auth/AuthContext';
 import { useSellerListings } from '../../hooks/useSellerListings';
 import { useDeleteProduct } from '../../hooks/useProductMutations';
 import { Button } from '@/components/ui/button';
@@ -35,7 +35,8 @@ export const Route = createFileRoute('/marketplace/my-listings')({
 });
 
 function MyListingsPage() {
-  const { isSignedIn, user } = useUser();
+  const { user } = useAuth();
+  const isSignedIn = !!user;
   const navigate = useNavigate();
   const carouselApiRef = useRef<CarouselApi | null>(null);
   const autoRotateRef = useRef<number | null>(null);

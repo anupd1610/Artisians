@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/utils/animations";
 import { LogOut, Menu, X } from "lucide-react";
-import { SignInButton, SignUpButton, UserButton, useClerk, useUser } from "@clerk/react";
+import { useAuth } from "@/components/auth/AuthContext";
+import { AuthModal } from "@/components/auth/AuthModal";
 import { useAdminAccess } from "@/hooks/useAdminAccess";
 import { isAllowedAdminEmail } from "@/lib/sellerProfiles";
 
@@ -15,13 +16,13 @@ const links = [
 export function Navbar() {
   const linksRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const { signOut } = useClerk();
-  const { isSignedIn, user } = useUser();
-  const { isAdmin } = useAdminAccess(isSignedIn ? user?.id : undefined, user?.primaryEmailAddress?.emailAddress);
+  const { user, signOut } = useAuth();
+  const isSignedIn = !!user;
+  const { isAdmin } = useAdminAccess(isSignedIn ? user?.id : undefined, user?.email);
   const navLinks = isSignedIn
     ? [
         ...links,
-        ...((isAdmin || isAllowedAdminEmail(user?.primaryEmailAddress?.emailAddress)) ? [{ label: "Admin Portal", href: "/admin" }] : []),
+        ...((isAdmin || isAllowedAdminEmail(user?.email)) ? [{ label: "Admin Portal", href: "/admin" }] : []),
         { label: "Sell Your Craft", href: "#sell" },
       ]
     : links;
@@ -63,10 +64,10 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           {isSignedIn ? (
             <div className="hidden md:flex items-center gap-3">
-              <UserButton />
+              <span className="text-xs text-foreground font-medium">{user?.email?.split('@')[0]}</span>
               <button
                 type="button"
-                onClick={() => signOut({ redirectUrl: "/" })}
+                onClick={() => signOut()}
                 className="inline-flex items-center gap-2 rounded-md border border-foreground px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] text-foreground transition-colors hover:bg-foreground hover:text-text-light"
               >
                 <LogOut className="h-3.5 w-3.5" />
@@ -76,16 +77,16 @@ export function Navbar() {
           ) : (
             <>
               <div className="hidden md:flex items-center gap-3">
-                <SignInButton mode="modal">
+                <AuthModal defaultTab="login">
                   <button className="border border-foreground px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground hover:text-text-light transition-colors">
                     Sign In
                   </button>
-                </SignInButton>
-                <SignUpButton mode="modal" forceRedirectUrl="/seller-onboarding">
+                </AuthModal>
+                <AuthModal defaultTab="signup">
                   <button className="bg-foreground text-text-light px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground/90 transition-colors">
                     Sign Up
                   </button>
-                </SignUpButton>
+                </AuthModal>
               </div>
             </>
           )}
@@ -114,10 +115,10 @@ export function Navbar() {
           <div className="flex gap-3 mt-2 flex-col sm:flex-row">
             {isSignedIn ? (
               <div className="flex flex-col gap-3">
-                <UserButton />
+                <span className="text-xs text-foreground font-medium">{user?.email?.split('@')[0]}</span>
                 <button
                   type="button"
-                  onClick={() => signOut({ redirectUrl: "/" })}
+                  onClick={() => signOut()}
                   className="inline-flex items-center justify-center gap-2 rounded-md border border-foreground px-4 py-2 text-[10px] uppercase tracking-[0.12em] text-foreground transition-colors hover:bg-foreground hover:text-text-light"
                 >
                   <LogOut className="h-3.5 w-3.5" />
@@ -126,16 +127,16 @@ export function Navbar() {
               </div>
             ) : (
               <>
-                <SignInButton mode="modal">
+                <AuthModal defaultTab="login">
                   <button className="flex-1 border border-foreground px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground hover:text-text-light transition-colors">
                     Sign In
                   </button>
-                </SignInButton>
-                <SignUpButton mode="modal" forceRedirectUrl="/seller-onboarding">
+                </AuthModal>
+                <AuthModal defaultTab="signup">
                   <button className="flex-1 bg-foreground text-text-light px-4 py-1.5 text-[10px] uppercase tracking-[0.12em] hover:bg-foreground/90 transition-colors">
                     Sign Up
                   </button>
-                </SignUpButton>
+                </AuthModal>
               </>
             )}
           </div>

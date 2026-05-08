@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useUser } from "@clerk/react";
+import { useAuth } from "@/components/auth/AuthContext";
 import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
 import { MarketplaceSection } from "@/components/site/MarketplaceSection";
@@ -36,14 +36,15 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [refreshToken, setRefreshToken] = useState(0);
   const navigate = useNavigate();
-  const { isSignedIn, user } = useUser();
+  const { user } = useAuth();
+  const isSignedIn = !!user;
 
   useEffect(() => {
-    const email = user?.primaryEmailAddress?.emailAddress;
+    const email = user?.email;
     if (isSignedIn && isAllowedAdminEmail(email)) {
       navigate({ to: "/admin" });
     }
-  }, [isSignedIn, navigate, user?.primaryEmailAddress?.emailAddress]);
+  }, [isSignedIn, navigate, user?.email]);
 
   return (
     <main className="min-h-screen bg-bg-warm">

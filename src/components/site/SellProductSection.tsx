@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { useUser, SignInButton, SignUpButton } from "@clerk/react";
+import { useAuth } from "@/components/auth/AuthContext";
+import { AuthModal } from "@/components/auth/AuthModal";
 import { ImagePlus, LoaderCircle, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,8 @@ interface SellProductSectionProps {
 }
 
 export function SellProductSection({ onProductCreated }: SellProductSectionProps) {
-  const { isSignedIn, user } = useUser();
+  const { user } = useAuth();
+  const isSignedIn = !!user;
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [contactNumber, setContactNumber] = useState("");
@@ -216,16 +218,16 @@ export function SellProductSection({ onProductCreated }: SellProductSectionProps
                     Create an account or sign in to start selling your handmade items.
                   </p>
                   <div className="mt-5 flex flex-wrap gap-3">
-                    <SignInButton mode="modal">
+                    <AuthModal defaultTab="login">
                       <button className="bg-foreground text-text-light px-4 py-2 text-[10px] uppercase tracking-[0.15em] hover:bg-foreground/90 transition-colors">
                         Sign In
                       </button>
-                    </SignInButton>
-                    <SignUpButton mode="modal" forceRedirectUrl="/seller-onboarding">
+                    </AuthModal>
+                    <AuthModal defaultTab="signup" onSuccess={() => window.location.assign("/seller-onboarding")}>
                       <button className="border border-foreground px-4 py-2 text-[10px] uppercase tracking-[0.15em] hover:bg-foreground hover:text-text-light transition-colors">
                         Sign Up
                       </button>
-                    </SignUpButton>
+                    </AuthModal>
                   </div>
                 </div>
               </div>
@@ -267,7 +269,7 @@ export function SellProductSection({ onProductCreated }: SellProductSectionProps
           ) : (
             <Card className="p-6 bg-card-warm border border-card-warm-border shadow-[0_12px_40px_rgba(0,0,0,0.06)]">
               <p className="text-[10px] uppercase tracking-[0.18em] text-text-muted-warm mb-5">
-                Signed in as {user?.firstName ?? "seller"}
+                Signed in as {user?.email?.split('@')[0] ?? "seller"}
               </p>
 
               <form className="space-y-5" onSubmit={handleSubmit}>

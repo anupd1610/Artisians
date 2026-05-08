@@ -1,12 +1,11 @@
 import { r as reactExports, j as jsxRuntimeExports } from "../_libs/react.mjs";
 import { d as useNavigate } from "../_libs/tanstack__react-router.mjs";
-import "../_libs/clerk__react.mjs";
+import { u as useAuth } from "./router-TuDnUs-t.mjs";
 import { t as toast } from "../_libs/sonner.mjs";
-import { C as Card, B as Button, c as createSellerProfilePlaceholder, a as updateSellerVerificationStatus, b as blockSellerProfile, p as promoteSellerProfileToAdmin, d as getSellerProfilesWithCounts } from "./sellerProfiles-BaII5BVd.mjs";
-import { I as Input, T as Textarea } from "./textarea-DQRn0zgF.mjs";
-import { u as useAdminAccess, g as getSiteSettings, s as saveSiteSettings } from "./siteSettings-DIfrIqTy.mjs";
-import { d as deleteProductListing, g as getProductListings } from "./productListings-DUc64N3F.mjs";
-import { p as useClerk, o as useUser } from "../_libs/clerk__shared.mjs";
+import { C as Card, B as Button, c as createSellerProfilePlaceholder, a as updateSellerVerificationStatus, b as blockSellerProfile, p as promoteSellerProfileToAdmin, d as getSellerProfilesWithCounts } from "./sellerProfiles-CxEQPkQ2.mjs";
+import { I as Input, T as Textarea } from "./textarea-CmMe_hFg.mjs";
+import { u as useAdminAccess, g as getSiteSettings, s as saveSiteSettings } from "./siteSettings-DQaTrZGW.mjs";
+import { d as deleteProductListing, g as getProductListings } from "./productListings-DoenrZlK.mjs";
 import { C as Crown, a as UserCog, b as Ban, S as Store, L as LoaderCircle, T as TriangleAlert, c as LayoutDashboard, d as Settings, e as Logs, f as LogOut, B as BadgeCheck, g as CircleX, h as ShieldCheck, P as Phone } from "../_libs/lucide-react.mjs";
 import "../_libs/tanstack__router-core.mjs";
 import "../_libs/tanstack__history.mjs";
@@ -20,14 +19,7 @@ import "util";
 import "crypto";
 import "async_hooks";
 import "stream";
-import "../_libs/scheduler.mjs";
 import "../_libs/isbot.mjs";
-import "../_libs/radix-ui__react-slot.mjs";
-import "../_libs/radix-ui__react-compose-refs.mjs";
-import "../_libs/class-variance-authority.mjs";
-import "../_libs/clsx.mjs";
-import "../_libs/tailwind-merge.mjs";
-import "./router-D_7zmzov.mjs";
 import "../_libs/supabase__supabase-js.mjs";
 import "../_libs/supabase__postgrest-js.mjs";
 import "../_libs/supabase__realtime-js.mjs";
@@ -37,7 +29,11 @@ import "../_libs/iceberg-js.mjs";
 import "../_libs/supabase__auth-js.mjs";
 import "tslib";
 import "../_libs/supabase__functions-js.mjs";
-import "../_libs/dequal.mjs";
+import "../_libs/radix-ui__react-slot.mjs";
+import "../_libs/radix-ui__react-compose-refs.mjs";
+import "../_libs/class-variance-authority.mjs";
+import "../_libs/clsx.mjs";
+import "../_libs/tailwind-merge.mjs";
 const ADMIN_AUDIT_KEY = "artisan-echo-admin-audit";
 function readAuditEvents() {
   if (typeof window === "undefined") return [];
@@ -57,16 +53,14 @@ function writeAuditEvents(events) {
 function AdminPortalPage() {
   const navigate = useNavigate();
   const {
+    user,
     signOut
-  } = useClerk();
-  const {
-    isSignedIn,
-    user
-  } = useUser();
+  } = useAuth();
+  const isSignedIn = !!user;
   const {
     isAdmin,
     loading: adminLoading
-  } = useAdminAccess(isSignedIn ? user?.id : void 0, user?.primaryEmailAddress?.emailAddress);
+  } = useAdminAccess(isSignedIn ? user?.id : void 0, user?.email);
   const [activeSection, setActiveSection] = reactExports.useState("dashboard");
   const [loading, setLoading] = reactExports.useState(true);
   const [savingId, setSavingId] = reactExports.useState(null);
@@ -301,11 +295,9 @@ function AdminPortalPage() {
       }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600", children: [
         "Signed in as",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 font-semibold text-slate-900", children: user?.primaryEmailAddress?.emailAddress ?? user?.id })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-1 font-semibold text-slate-900", children: user?.email ?? user?.id })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { type: "button", className: "mt-4 w-full bg-[#ce7b3b] hover:bg-[#b96f35] text-white", onClick: () => signOut({
-        redirectUrl: "/"
-      }), children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(Button, { type: "button", className: "mt-4 w-full bg-[#ce7b3b] hover:bg-[#b96f35] text-white", onClick: () => signOut(), children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(LogOut, { className: "h-4 w-4" }),
         "Logout"
       ] })

@@ -458,12 +458,12 @@ function requireReact() {
   return react.exports;
 }
 var reactExports = requireReact();
-const React = /* @__PURE__ */ getDefaultExportFromCjs(reactExports);
-const React$1 = /* @__PURE__ */ _mergeNamespaces({
+const React2 = /* @__PURE__ */ getDefaultExportFromCjs(reactExports);
+const React = /* @__PURE__ */ _mergeNamespaces({
   __proto__: null,
-  default: React
+  default: React2
 }, [reactExports]);
-var jsxRuntime$2 = { exports: {} };
+var jsxRuntime = { exports: {} };
 var reactJsxRuntime_production = {};
 var hasRequiredReactJsxRuntime_production;
 function requireReactJsxRuntime_production() {
@@ -495,24 +495,18 @@ function requireReactJsxRuntime_production() {
 }
 var hasRequiredJsxRuntime;
 function requireJsxRuntime() {
-  if (hasRequiredJsxRuntime) return jsxRuntime$2.exports;
+  if (hasRequiredJsxRuntime) return jsxRuntime.exports;
   hasRequiredJsxRuntime = 1;
   {
-    jsxRuntime$2.exports = requireReactJsxRuntime_production();
+    jsxRuntime.exports = requireReactJsxRuntime_production();
   }
-  return jsxRuntime$2.exports;
+  return jsxRuntime.exports;
 }
 var jsxRuntimeExports = requireJsxRuntime();
-const jsxRuntime = /* @__PURE__ */ getDefaultExportFromCjs(jsxRuntimeExports);
-const jsxRuntime$1 = /* @__PURE__ */ _mergeNamespaces({
-  __proto__: null,
-  default: jsxRuntime
-}, [jsxRuntimeExports]);
 export {
-  React as R,
+  React2 as R,
   requireReact as a,
-  jsxRuntime$1 as b,
-  React$1 as c,
+  React as b,
   getDefaultExportFromCjs as g,
   jsxRuntimeExports as j,
   reactExports as r

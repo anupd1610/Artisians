@@ -1,12 +1,12 @@
 import { r as reactExports } from "../_libs/react.mjs";
-import { f as isAdminIdentity } from "./sellerProfiles-BaII5BVd.mjs";
-function useAdminAccess(clerkUserId, email) {
+import { f as isAdminIdentity } from "./sellerProfiles-CxEQPkQ2.mjs";
+function useAdminAccess(userId, email) {
   const [isAdmin, setIsAdmin] = reactExports.useState(false);
-  const [loading, setLoading] = reactExports.useState(Boolean(clerkUserId));
+  const [loading, setLoading] = reactExports.useState(Boolean(userId));
   reactExports.useEffect(() => {
     let isMounted = true;
     async function checkAdmin() {
-      if (!clerkUserId) {
+      if (!userId) {
         if (isMounted) {
           setIsAdmin(false);
           setLoading(false);
@@ -14,7 +14,7 @@ function useAdminAccess(clerkUserId, email) {
         return;
       }
       setLoading(true);
-      const result = await isAdminIdentity(clerkUserId, email);
+      const result = await isAdminIdentity(userId, email);
       if (!isMounted) return;
       setIsAdmin(result);
       setLoading(false);
@@ -23,7 +23,7 @@ function useAdminAccess(clerkUserId, email) {
     return () => {
       isMounted = false;
     };
-  }, [clerkUserId, email]);
+  }, [userId, email]);
   return { isAdmin, loading };
 }
 const DEFAULT_SITE_SETTINGS = {

@@ -1,11 +1,10 @@
 import { r as reactExports, j as jsxRuntimeExports } from "../_libs/react.mjs";
 import { d as useNavigate } from "../_libs/tanstack__react-router.mjs";
-import { S as SignInButton, a as SignUpButton } from "../_libs/clerk__react.mjs";
+import { u as useAuth } from "./router-TuDnUs-t.mjs";
+import { A as AuthModal, L as Label } from "./AuthModal-Bb3OkJ37.mjs";
 import { t as toast } from "../_libs/sonner.mjs";
-import { C as Card, B as Button, g as getSellerProfile, r as readFileAsDataUrl, u as upsertSellerProfile } from "./sellerProfiles-BaII5BVd.mjs";
-import { I as Input, T as Textarea } from "./textarea-DQRn0zgF.mjs";
-import { L as Label } from "./label-BupTES8i.mjs";
-import { o as useUser } from "../_libs/clerk__shared.mjs";
+import { C as Card, B as Button, g as getSellerProfile, r as readFileAsDataUrl, u as upsertSellerProfile } from "./sellerProfiles-CxEQPkQ2.mjs";
+import { I as Input, T as Textarea } from "./textarea-CmMe_hFg.mjs";
 import { L as LoaderCircle, U as Upload, B as BadgeCheck } from "../_libs/lucide-react.mjs";
 import "../_libs/tanstack__router-core.mjs";
 import "../_libs/tanstack__history.mjs";
@@ -19,14 +18,7 @@ import "util";
 import "crypto";
 import "async_hooks";
 import "stream";
-import "../_libs/scheduler.mjs";
 import "../_libs/isbot.mjs";
-import "../_libs/radix-ui__react-slot.mjs";
-import "../_libs/radix-ui__react-compose-refs.mjs";
-import "../_libs/class-variance-authority.mjs";
-import "../_libs/clsx.mjs";
-import "../_libs/tailwind-merge.mjs";
-import "./router-D_7zmzov.mjs";
 import "../_libs/supabase__supabase-js.mjs";
 import "../_libs/supabase__postgrest-js.mjs";
 import "../_libs/supabase__realtime-js.mjs";
@@ -36,14 +28,42 @@ import "../_libs/iceberg-js.mjs";
 import "../_libs/supabase__auth-js.mjs";
 import "tslib";
 import "../_libs/supabase__functions-js.mjs";
-import "../_libs/dequal.mjs";
-import "../_libs/radix-ui__react-label.mjs";
+import "../_libs/radix-ui__react-dialog.mjs";
+import "../_libs/radix-ui__primitive.mjs";
+import "../_libs/radix-ui__react-compose-refs.mjs";
+import "../_libs/radix-ui__react-context.mjs";
+import "../_libs/radix-ui__react-id.mjs";
+import "../_libs/@radix-ui/react-use-layout-effect+[...].mjs";
+import "../_libs/@radix-ui/react-use-controllable-state+[...].mjs";
+import "../_libs/@radix-ui/react-dismissable-layer+[...].mjs";
 import "../_libs/radix-ui__react-primitive.mjs";
+import "../_libs/radix-ui__react-slot.mjs";
+import "../_libs/@radix-ui/react-use-callback-ref+[...].mjs";
+import "../_libs/@radix-ui/react-use-escape-keydown+[...].mjs";
+import "../_libs/radix-ui__react-focus-scope.mjs";
+import "../_libs/radix-ui__react-portal.mjs";
+import "../_libs/radix-ui__react-presence.mjs";
+import "../_libs/radix-ui__react-focus-guards.mjs";
+import "../_libs/react-remove-scroll.mjs";
+import "../_libs/react-remove-scroll-bar.mjs";
+import "../_libs/react-style-singleton.mjs";
+import "../_libs/get-nonce.mjs";
+import "../_libs/use-sidecar.mjs";
+import "../_libs/use-callback-ref.mjs";
+import "../_libs/aria-hidden.mjs";
+import "../_libs/radix-ui__react-tabs.mjs";
+import "../_libs/radix-ui__react-roving-focus.mjs";
+import "../_libs/radix-ui__react-collection.mjs";
+import "../_libs/radix-ui__react-direction.mjs";
+import "../_libs/radix-ui__react-label.mjs";
+import "../_libs/class-variance-authority.mjs";
+import "../_libs/clsx.mjs";
+import "../_libs/tailwind-merge.mjs";
 function SellerOnboardingPage() {
   const {
-    isSignedIn,
     user
-  } = useUser();
+  } = useAuth();
+  const isSignedIn = !!user;
   const navigate = useNavigate();
   const [loading, setLoading] = reactExports.useState(true);
   const [saving, setSaving] = reactExports.useState(false);
@@ -70,7 +90,7 @@ function SellerOnboardingPage() {
       const result = await getSellerProfile(user.id);
       if (!isMounted) return;
       setExistingProfile(result.data);
-      setFullName(result.data?.full_name ?? [user.firstName, user.lastName].filter(Boolean).join(" "));
+      setFullName(result.data?.full_name ?? [user.user_metadata?.first_name, user.user_metadata?.last_name].filter(Boolean).join(" "));
       setPhoneNumber(result.data?.phone_number ?? "");
       setAddress(result.data?.address ?? "");
       setGovernmentIdType(result.data?.government_id_type ?? "Aadhaar Card");
@@ -167,8 +187,8 @@ function SellerOnboardingPage() {
       /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "mt-3 font-display text-3xl text-foreground", children: "Sign in to continue" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-4 text-sm leading-[1.8] text-text-muted-warm", children: "Create your account first, then complete your seller profile with verification details." }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 flex flex-wrap justify-center gap-3", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(SignInButton, { mode: "modal", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "border border-foreground px-4 py-2 text-[10px] uppercase tracking-[0.15em] hover:bg-foreground hover:text-text-light transition-colors", children: "Sign In" }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(SignUpButton, { mode: "modal", afterSignUpUrl: "/seller-onboarding", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-foreground px-4 py-2 text-[10px] uppercase tracking-[0.15em] text-text-light transition-colors hover:bg-foreground/90", children: "Sign Up" }) })
+        /* @__PURE__ */ jsxRuntimeExports.jsx(AuthModal, { defaultTab: "login", children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "border border-foreground px-4 py-2 text-[10px] uppercase tracking-[0.15em] hover:bg-foreground hover:text-text-light transition-colors", children: "Sign In" }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(AuthModal, { defaultTab: "signup", onSuccess: () => window.location.reload(), children: /* @__PURE__ */ jsxRuntimeExports.jsx("button", { className: "bg-foreground px-4 py-2 text-[10px] uppercase tracking-[0.15em] text-text-light transition-colors hover:bg-foreground/90", children: "Sign Up" }) })
       ] })
     ] }) }) });
   }

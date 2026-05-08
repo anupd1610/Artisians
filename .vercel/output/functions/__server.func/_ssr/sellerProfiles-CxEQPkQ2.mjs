@@ -3,7 +3,7 @@ import { S as Slot } from "../_libs/radix-ui__react-slot.mjs";
 import { c as cva } from "../_libs/class-variance-authority.mjs";
 import { c as clsx } from "../_libs/clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
-import { s as supabase } from "./router-D_7zmzov.mjs";
+import { s as supabase } from "./router-TuDnUs-t.mjs";
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
@@ -103,12 +103,12 @@ function readFileAsDataUrl(file) {
     reader.readAsDataURL(file);
   });
 }
-async function getSellerProfile(clerkUserId) {
+async function getSellerProfile(userId) {
   try {
-    if (!clerkUserId) {
+    if (!userId) {
       return { data: null, error: "Missing seller identity." };
     }
-    const { data, error } = await supabase.from("seller_profiles").select("*").eq("clerk_user_id", clerkUserId).maybeSingle();
+    const { data, error } = await supabase.from("seller_profiles").select("*").eq("clerk_user_id", userId).maybeSingle();
     if (error) {
       return { data: null, error: error.message };
     }
@@ -119,10 +119,10 @@ async function getSellerProfile(clerkUserId) {
 }
 async function upsertSellerProfile(input) {
   try {
-    const existingProfileResult = await getSellerProfile(input.clerkUserId);
+    const existingProfileResult = await getSellerProfile(input.userId);
     const existingProfile = existingProfileResult.data;
     const payload = {
-      clerk_user_id: input.clerkUserId,
+      clerk_user_id: input.userId,
       full_name: input.fullName,
       phone_number: input.phoneNumber,
       address: input.address,
@@ -146,10 +146,10 @@ async function upsertSellerProfile(input) {
     return { data: null, error: toErrorMessage(error) };
   }
 }
-async function isAdminUser(clerkUserId) {
+async function isAdminUser(userId) {
   try {
-    if (!clerkUserId) return false;
-    const { data, error } = await supabase.from("admins").select("id").eq("clerk_user_id", clerkUserId).maybeSingle();
+    if (!userId) return false;
+    const { data, error } = await supabase.from("admins").select("id").eq("clerk_user_id", userId).maybeSingle();
     if (error || !data) {
       return false;
     }
@@ -158,14 +158,14 @@ async function isAdminUser(clerkUserId) {
     return false;
   }
 }
-async function isAdminIdentity(clerkUserId, email) {
+async function isAdminIdentity(userId, email) {
   if (isAllowedAdminEmail(email)) {
     return true;
   }
-  if (!clerkUserId) {
+  if (!userId) {
     return false;
   }
-  return isAdminUser(clerkUserId);
+  return isAdminUser(userId);
 }
 async function getSellerProfilesWithCounts() {
   try {
@@ -228,12 +228,12 @@ async function getSellerProfilesWithCounts() {
     return { data: null, error: toErrorMessage(error) };
   }
 }
-async function createSellerProfilePlaceholder(clerkUserId, fallbackPhone) {
+async function createSellerProfilePlaceholder(userId, fallbackPhone) {
   try {
     const { data, error } = await supabase.from("seller_profiles").upsert(
       {
-        clerk_user_id: clerkUserId,
-        full_name: `Seller ${clerkUserId.slice(0, 8)}`,
+        clerk_user_id: userId,
+        full_name: `Seller ${userId.slice(0, 8)}`,
         phone_number: fallbackPhone?.trim() || "Not provided",
         address: "Pending seller address.",
         government_id_type: "Pending",
@@ -274,7 +274,7 @@ async function blockSellerProfile(sellerProfileId, blockedByAdminId, blocked, bl
     return { data: null, error: toErrorMessage(error) };
   }
 }
-async function promoteSellerProfileToAdmin(sellerProfileId, clerkUserId, promotedByAdminId) {
+async function promoteSellerProfileToAdmin(sellerProfileId, userId, promotedByAdminId) {
   try {
     const profileUpdate = await supabase.from("seller_profiles").update({ role: "admin", verification_status: "verified" }).eq("id", sellerProfileId).select("*").single();
     if (profileUpdate.error) {
@@ -282,7 +282,7 @@ async function promoteSellerProfileToAdmin(sellerProfileId, clerkUserId, promote
     }
     const adminInsert = await supabase.from("admins").upsert(
       {
-        clerk_user_id: clerkUserId,
+        clerk_user_id: userId,
         seller_profile_id: sellerProfileId,
         promoted_by_admin_id: promotedByAdminId
       },

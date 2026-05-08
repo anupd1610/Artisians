@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useUser } from "@clerk/react";
+import { useAuth } from "@/components/auth/AuthContext";
 import { Phone, Store, Trash2, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { deleteProductListing, getProductListings, type ProductListing } from "@/lib/productListings";
 
 export function MarketplaceSection({ refreshToken }: { refreshToken: number }) {
-  const { isSignedIn, user } = useUser();
+  const { user } = useAuth();
+  const isSignedIn = !!user;
   const [listings, setListings] = useState<ProductListing[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
